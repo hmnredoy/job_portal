@@ -2,18 +2,17 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
-let uData = window.localStorage.getItem('uData')
-
-const store = new Vuex.Store({
+export default new Vuex.Store({
     state: {
-        loggedIn: false
+        loggedIn: false,
+        userName: null,
     },
     mutations: {
         setLogin(state, yesNo){
             state.loggedIn = yesNo
+        },
+        setUserName(state, value){
+            state.userName = value
         }
     }
 })
-
-
-export default store;

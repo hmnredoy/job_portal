@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import {helper} from "./helper";
 Vue.use(VueRouter)
 
 const opeRouteNames = ['Login', 'Register', 'Index', 'NotFound']
@@ -51,13 +52,8 @@ router.beforeEach((to, from, next) => {
         return opeRouteNames.includes(x.name)
     })
 
-
-    if(localStorage.getItem("token") == 'undefined'){
-        localStorage.removeItem("token")
-    }
-
-    let currentUser = localStorage.getItem("token")
-
+    // helper.setToLocal('previousURL', from.path)
+    let currentUser = helper.getFromLocal("token")
 
     if(!open && !currentUser) {
         next('/')

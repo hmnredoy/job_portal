@@ -6,10 +6,17 @@
 
         <ul class="navbar-nav ml-auto" v-if="loggedIn">
             <li class="nav-item">
-                  <router-link to="profile" class="nav-link">Profile</router-link>
+                  <router-link to="dashboard" class="nav-link">
+                      Dashboard
+                  </router-link>
             </li>
             <li class="nav-item">
-                  <a href="javascript:void" class="nav-link" @click.prevent="logout">Logout</a>
+                  <router-link to="profile" class="nav-link">
+                      Profile
+                  </router-link>
+            </li>
+            <li class="nav-item">
+                  <a href="javascript:;" class="nav-link" @click.prevent="logout">Logout</a>
             </li>
         </ul>
          <ul class="navbar-nav ml-auto" v-else>
@@ -25,6 +32,8 @@
 </template>
 
 <script>
+    import {helper} from "../helper";
+
     export default {
         name: "Navbar",
         computed: {
@@ -34,9 +43,7 @@
         },
         methods: {
             logout(){
-                this.$store.commit("setLogin", false)
-                localStorage.removeItem('token')
-                this.$router.push({ name: 'Home'})
+                helper.logout()
             }
         }
     }

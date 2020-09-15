@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../router */ "./resources/js/vue/router.js");
 //
 //
 //
@@ -25,14 +27,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
-  mounted: function mounted() {
-    if (localStorage.getItem("token")) {
-      this.$router.push({
-        name: 'Dashboard'
+  data: function data() {
+    return {
+      jobs: null
+    };
+  },
+  methods: {
+    getJobs: function getJobs() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('/all-jobs?page=' + page).then(function (response) {
+        _this.jobs = response.data;
       });
+    },
+    apply: function apply() {
+      var isValid = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].checkAuth({
+        preventRedirect: true
+      });
+      var token = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].getFromLocal('token');
+      console.log(isValid);
+
+      if (isValid) {
+        axios.post('/apply', token).then(function (res) {
+          console.log(res);
+        });
+      } else {
+        console.log('login');
+        this.$router.push({
+          path: '/login'
+        });
+      }
     }
+  },
+  mounted: function mounted() {
+    this.getJobs();
   }
 });
 
@@ -53,30 +104,106 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("navbar"), _vm._v(" "), _vm._m(0)], 1)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("main", { staticClass: "container", attrs: { role: "main" } }, [
-      _c("div", { staticClass: "starter-template" }, [
-        _c("h1", [_vm._v("Bootstrap starter template")]),
-        _vm._v(" "),
-        _c("p", { staticClass: "lead" }, [
-          _vm._v(
-            "Use this document as a way to quickly start any new project.\n            "
-          ),
-          _c("br"),
-          _vm._v(
-            " All you get is this text and a mostly barebones HTML document."
+  return _c(
+    "div",
+    [
+      _c("navbar"),
+      _vm._v(" "),
+      _c("div", { staticClass: "album py-5 bg-light" }, [
+        _c("div", { staticClass: "container" }, [
+          _c(
+            "div",
+            { staticClass: "row" },
+            [
+              _vm._l(_vm.jobs.data, function(job) {
+                return _c("div", { key: job.id, staticClass: "col-md-4" }, [
+                  _c("div", { staticClass: "card mb-4 shadow-sm" }, [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "bd-placeholder-img card-img-top",
+                        attrs: {
+                          width: "100%",
+                          height: "225",
+                          xmlns: "http://www.w3.org/2000/svg",
+                          preserveAspectRatio: "xMidYMid slice",
+                          focusable: "false",
+                          role: "img",
+                          "aria-label": "Placeholder: Thumbnail"
+                        }
+                      },
+                      [
+                        _c("title", [_vm._v("Placeholder")]),
+                        _vm._v(" "),
+                        _c("rect", {
+                          attrs: {
+                            width: "100%",
+                            height: "100%",
+                            fill: "#55595c"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "text",
+                          {
+                            attrs: {
+                              x: "50%",
+                              y: "50%",
+                              fill: "#eceeef",
+                              dy: ".3em"
+                            }
+                          },
+                          [_vm._v(_vm._s(job.title))]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-body" }, [
+                      _c("p", { staticClass: "card-text" }, [
+                        _vm._v(_vm._s(job.description))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-between align-items-center"
+                        },
+                        [
+                          _c("small", { staticClass: "text-muted" }, [
+                            _vm._v(_vm._s(_vm._f("fromNow")(job.created_at)))
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-success",
+                              attrs: { type: "button" },
+                              on: { click: _vm.apply }
+                            },
+                            [_vm._v("Apply")]
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ])
+              }),
+              _vm._v(" "),
+              _c("pagination", {
+                attrs: { data: _vm.jobs },
+                on: { "pagination-change-page": _vm.getJobs }
+              })
+            ],
+            2
           )
         ])
       ])
-    ])
-  }
-]
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

@@ -32,52 +32,54 @@
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit" v-if="user.type">Register</button>
 
-            <div v-if="errors" class="alert alert-danger mt-4 rounded font-bold mb-4 shadow-lg">
-                <div v-for="(v, k) in errors" :key="k">
-                    <p v-for="error in v" :key="error" class="text-sm">
-                    {{ error }}
-                    </p>
-                </div>
-            </div>
+            <Errors :errors="errors"></Errors>
+
         </form>
 
     </div>
 </template>
 
 <script>
-    export default {
-        name: "Register",
-        data() {
-            return {
-                user: {
-                    type: null,
-                    firstName: null,
-                    lastName: null,
-                    businessName: null,
-                    email: null,
-                    password: null
-                },
-                errors: null
-            }
-        },
-        methods: {
-            setType(event){
-                this.user.type = event.target.value
+import {helper} from "../helper";
+
+export default {
+    name: "Register",
+    data() {
+        return {
+            user: {
+                type: null,
+                firstName: null,
+                lastName: null,
+                businessName: null,
+                email: null,
+                password: null
             },
-            register(){
-                axios.post('/register', this.user)
-                .then((res) => {
-                    this.errors = null
-                    localStorage.setItem("token", res.data.token)
-                    this.$store.commit("setLogin", true)
-                    this.$router.push({ name: 'Dashboard'})
-                })
-                .catch((e) => {
-                    this.errors = e.response.data.errors
-                })
-            }
+            errors: null
+        }
+    },
+    methods: {
+        setType(event){
+            this.user.type = event.target.value
+        },
+        register(){
+            axios.post('/register', this.user)
+            .then((res) => {
+                this.errors = null
+
+                helper.setToLocal("token", res.data.token)
+                helper.setToLocal("user", {"name": res.data.name})
+
+                this.$store.commit("setLogin", true)
+                this.$store.commit("setUserName", res.data.name)
+
+                this.$router.push({ name: 'Dashboard'})
+            })
+            .catch((e) => {
+                this.errors = e.response.data.errors
+            })
         }
     }
+}
 </script>
 
 <style scoped>

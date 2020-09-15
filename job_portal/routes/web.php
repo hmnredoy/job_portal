@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
+Route::post('register',     [AuthController::class, 'register']);
+Route::post('login',        [AuthController::class, 'login']);
+Route::get('logout',        [AuthController::class, 'logout']);
+Route::post('user',         [UserController::class, 'getUser']);
+Route::post('create-job',   [JobController::class,  'store']);
+Route::get('verify',        [AuthController::class, 'verifyUser']);
+Route::get('jobs',          [JobController::class, 'index']);
+Route::get('all-jobs',      [JobController::class, 'allJobs']);
+Route::post('change-job-status', [JobController::class, 'changeStatus']);
+
 Route::get('{path}', function () {
     return view('index');
 })->where('path', '.*');
-
-
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login',  [AuthController::class, 'login']);
-Route::post('user',  [UserController::class, 'getUser']);

@@ -9,6 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
 //
 //
 //
@@ -50,11 +51,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Register",
   data: function data() {
@@ -79,9 +76,14 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/register', this.user).then(function (res) {
         _this.errors = null;
-        localStorage.setItem("token", res.data.token);
+        _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].setToLocal("token", res.data.token);
+        _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].setToLocal("user", {
+          "name": res.data.name
+        });
 
         _this.$store.commit("setLogin", true);
+
+        _this.$store.commit("setUserName", res.data.name);
 
         _this.$router.push({
           name: 'Dashboard'
@@ -371,33 +373,9 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _vm.errors
-            ? _c(
-                "div",
-                {
-                  staticClass:
-                    "alert alert-danger mt-4 rounded font-bold mb-4 shadow-lg"
-                },
-                _vm._l(_vm.errors, function(v, k) {
-                  return _c(
-                    "div",
-                    { key: k },
-                    _vm._l(v, function(error) {
-                      return _c("p", { key: error, staticClass: "text-sm" }, [
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(error) +
-                            "\n                "
-                        )
-                      ])
-                    }),
-                    0
-                  )
-                }),
-                0
-              )
-            : _vm._e()
-        ]
+          _c("Errors", { attrs: { errors: _vm.errors } })
+        ],
+        1
       )
     ],
     1

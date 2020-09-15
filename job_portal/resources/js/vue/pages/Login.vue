@@ -25,19 +25,15 @@
             </div> -->
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
-            <div v-if="errors" class="alert alert-danger mt-4 rounded font-bold mb-4 shadow-lg">
-                <div v-for="(v, k) in errors" :key="k">
-                    <p v-for="error in v" :key="error" class="text-sm">
-                    {{ error }}
-                    </p>
-                </div>
-            </div>
+            <Errors :errors="errors"></Errors>
 
         </form>
     </div>
 </template>
 
 <script>
+    import {helper} from "../helper";
+
     export default {
         name: "Login",
         data() {
@@ -54,9 +50,17 @@
                 axios.post('/login', this.user)
                 .then((res) => {
                     this.errors = null
-                    localStorage.setItem("token", res.data.token)
+
+                    helper.setToLocal("token", res.data.token)
+                    helper.setToLocal("user", {"name": res.data.name})
+
                     this.$store.commit("setLogin", true)
-                    this.$router.push({ name: 'Dashboard'})
+                    this.$store.commit("setUserName", res.data.name)
+
+                    let previousURL = helper.getFromLocal('previousURL')
+                    previousURL
+                        ? this.$router.push({ path: previousURL})
+                        : this.$router.push({ name: 'Dashboard'})
 
                 })
                 .catch((e) => {

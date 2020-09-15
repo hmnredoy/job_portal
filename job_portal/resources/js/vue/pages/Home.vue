@@ -3,24 +3,72 @@
 
     <navbar/>
 
-    <main role="main" class="container">
-        <div class="starter-template">
-            <h1>Bootstrap starter template</h1>
-            <p class="lead">Use this document as a way to quickly start any new project.
-                <br> All you get is this text and a mostly barebones HTML document.</p>
+        <div class="album py-5 bg-light">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-4" v-for="job in jobs.data" :key="job.id">
+                        <div class="card mb-4 shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"></rect>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{job.title}}</text></svg>
+                            <div class="card-body">
+                                <p class="card-text">{{job.description}}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{job.created_at | fromNow}}</small>
+                                    <button type="button" class="btn btn-sm btn-success" @click="apply">Apply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <pagination :data="jobs" @pagination-change-page="getJobs"></pagination>
+
+                </div>
+            </div>
         </div>
-    </main>
 
     </div>
 </template>
 
 <script>
+    import {helper} from "../helper";
+    import router from "../router";
+
     export default {
         name: "Home",
-        mounted() {
-            if(localStorage.getItem("token")){
-                this.$router.push({ name: 'Dashboard'})
+        data() {
+            return {
+                jobs: null
             }
+        },
+        methods: {
+            getJobs(page = 1){
+                axios.get('/all-jobs?page=' + page)
+                .then(response => {
+                    this.jobs = response.data;
+                });
+            },
+            apply(){
+                let isValid = helper.checkAuth({preventRedirect: true})
+                let token = helper.getFromLocal('token')
+
+                console.log(isValid)
+
+                if(isValid){
+                    axios.post('/apply', token).then((res) => {
+                        console.log(res)
+                    })
+                }else{
+                    console.log('login')
+
+                    this.$router.push({path: '/login'})
+                }
+            }
+        },
+        mounted() {
+            this.getJobs();
         },
     }
 </script>

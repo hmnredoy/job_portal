@@ -29,7 +29,7 @@ class AuthController extends Controller
         $user = User::create($request->input());
         Auth::login($user);
         unset($user['password'], $user['id']);
-        return ['status' => 'success', 'token' => $this->makeToken($user)];
+        return ['status' => 'success', 'token' => $this->makeToken($user), 'name' => $user->firstName];
     }
 
     public function login(Request $request)
@@ -44,10 +44,18 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             unset($user['id']);
-            return ['status' => 'success', 'token' => $this->makeToken($user)];
+            return ['status' => 'success', 'token' => $this->makeToken($user), 'name' => $user->firstName];
         }else{
             return response(['errors' => ['password' => ['Wrong credentials!']]], 422);
         }
+    }
+
+    public function verifyUser(){
+        return ['verified' => Auth::check()];
+    }
+
+    public function logout(){
+        Auth::logout();
     }
 
     protected function makeToken($payload)

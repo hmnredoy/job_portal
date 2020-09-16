@@ -51,20 +51,13 @@
                 });
             },
             apply(){
-                let isValid = helper.checkAuth({preventRedirect: true})
-                let token = helper.getFromLocal('token')
-
-                console.log(isValid)
-
-                if(isValid){
+                helper.checkAuth({preventRedirect: true}).then(res => {
+                    const token = helper.getFromLocal('token')
+                    !res ? this.$router.push({path: '/login'}) :
                     axios.post('/apply', token).then((res) => {
                         console.log(res)
                     })
-                }else{
-                    console.log('login')
-
-                    this.$router.push({path: '/login'})
-                }
+                })
             }
         },
         mounted() {

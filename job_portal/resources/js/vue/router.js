@@ -54,6 +54,8 @@ router.beforeEach((to, from, next) => {
 
     // helper.setToLocal('previousURL', from.path)
     let currentUser = helper.getFromLocal("token")
+    // console.log(currentUser)
+    console.log('router -- ' + !open && !currentUser)
 
     if(!open && !currentUser) {
         next('/')

@@ -3,6 +3,8 @@ import router from './router';
 
 let helper = {
     setToLocal(key, value, ttl = 1800000) { // 30 Minutes
+        console.log('in setToLocal')
+
         const now = new Date()
         const item = {
             value: value,
@@ -11,6 +13,8 @@ let helper = {
         localStorage.setItem(key, JSON.stringify(item))
     },
     getFromLocal(key) {
+        console.log('in getFromLocal')
+
         const itemStr = localStorage.getItem(key)
         // if the item doesn't exist, return null
         if (!itemStr) {
@@ -29,30 +33,33 @@ let helper = {
         }
         return item.value
     },
-    checkAuth(config){
+    async checkAuth(config) {
+        console.log('in checkauth')
         let redirectPath = config.redirectPath ?? '/'
         let logout = config.logout ?? true
         let preventRedirect = config.preventRedirect ?? false
+        let returnVal = false
 
         let token = localStorage.getItem('token')
-        if(token){
-            axios.get('/verify')
-            .then((res) => {
-                if(res.data.verified !== true){
+        if (token) {
+            await axios.get('/verify')
+                .then((res) => {
+                    if (res.data.verified !== true) {
+                        logout ? helper.logout(redirectPath) : ''
+                    }
+                    returnVal = res.data.verified;
+                })
+                .catch((e) => {
                     logout ? helper.logout(redirectPath) : ''
-                }
-                return res.data.verified;
-            })
-            .catch((e) => {
-                logout ? helper.logout(redirectPath) : ''
-                return false;
-            })
-        }else{
+                })
+        } else {
             !preventRedirect ? router.push({path: redirectPath}) : ''
-            return false
         }
+        return returnVal
     },
     logout(redirectPath = '/'){
+        console.log('in logout')
+
         axios.get('/logout').then(() => {
             store.commit("setLogin", false)
             localStorage.removeItem('token')

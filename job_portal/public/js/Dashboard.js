@@ -10,6 +10,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libraries_countries__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libraries/countries */ "./resources/js/libraries/countries.js");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
 //
 //
 //
@@ -159,6 +160,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Dashboard",
@@ -215,14 +217,25 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this4 = this;
 
-    // helper.checkAuth({redirectPath: '/login'});
-    axios.get('/verify').then(function (res) {
-      if (res.data.verified !== true) {
-        helper.logout(redirectPath);
-      }
-    })["catch"](function (e) {
-      helper.logout(redirectPath);
+    console.log('dashboard mounted');
+    var authStatus = false;
+    _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].checkAuth({
+      preventRedirect: true
+    }).then(function (res) {
+      authStatus = res;
+      console.log("auth " + authStatus);
     });
+    console.log("authStatus " + authStatus);
+    /*axios.get('/verify')
+        .then((res) => {
+            if(res.data.verified !== true){
+                helper.logout(redirectPath)
+            }
+        })
+        .catch((e) => {
+            helper.logout(redirectPath)
+        })*/
+
     this.countries = _libraries_countries__WEBPACK_IMPORTED_MODULE_0__["default"];
     $('#postedJobs').on('shown.bs.collapse', function () {
       _this4.getJobs();

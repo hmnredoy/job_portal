@@ -64,22 +64,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     apply: function apply() {
-      var isValid = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].checkAuth({
-        preventRedirect: true
-      });
-      var token = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].getFromLocal('token');
-      console.log(isValid);
+      var _this2 = this;
 
-      if (isValid) {
-        axios.post('/apply', token).then(function (res) {
+      _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].checkAuth({
+        preventRedirect: true
+      }).then(function (res) {
+        var token = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].getFromLocal('token');
+        !res ? _this2.$router.push({
+          path: '/login'
+        }) : axios.post('/apply', token).then(function (res) {
           console.log(res);
         });
-      } else {
-        console.log('login');
-        this.$router.push({
-          path: '/login'
-        });
-      }
+      });
     }
   },
   mounted: function mounted() {

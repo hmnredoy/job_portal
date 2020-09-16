@@ -20,40 +20,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe645bed-87c2-4093-a704-9cb4caf0c341" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/phpunit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/vue/components/CurrencyInput.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/vue/components/Errors.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/vue/helper.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/vue/libraries/filters.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/job_portal.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/job_portal.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Job.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Job.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Register.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/libraries/countries.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/libraries/countries.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/components.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/components/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/components/Navbar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/vue/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Dashboard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Register.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -198,7 +175,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../javascript/vue/vue-shop" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
@@ -225,7 +202,10 @@
       <workItem from="1600118142253" duration="534000" />
       <workItem from="1600183965510" duration="597000" />
       <workItem from="1600191735997" duration="16000" />
-      <workItem from="1600191754400" duration="16062000" />
+      <workItem from="1600191754400" duration="16274000" />
+      <workItem from="1600234777442" duration="1565000" />
+      <workItem from="1600236690708" duration="100000" />
+      <workItem from="1600236824257" duration="1235000" />
     </task>
     <servers />
   </component>
@@ -242,6 +222,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="4583" y="268" width="424" height="491" key="FileChooserDialogImpl" timestamp="1600193308411">

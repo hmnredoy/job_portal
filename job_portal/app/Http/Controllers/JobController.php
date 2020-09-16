@@ -35,4 +35,8 @@ class JobController extends Controller
         if($job){ return $job->update(['status' => !$job->status]) ? ['status' => 'success'] : response(['status' => 'failed'], 422); }
         return response(['status' => 'failed', 'message' => 'Job doesn\'t exist!'], 422);
     }
+
+    public function apply(Request $request){
+        dd($request->all());
+    }
 }

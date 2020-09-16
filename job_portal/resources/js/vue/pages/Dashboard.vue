@@ -149,6 +149,8 @@
 
 <script>
     import countries from "../../libraries/countries";
+    import {helper} from "../helper";
+
     export default {
         name: "Dashboard",
         data(){
@@ -196,8 +198,17 @@
             }
         },
         mounted() {
-            // helper.checkAuth({redirectPath: '/login'});
-            axios.get('/verify')
+            console.log('dashboard mounted')
+            let authStatus = false
+            helper.checkAuth({preventRedirect: true}).then(res => {
+                authStatus = res
+                console.log("auth " + authStatus)
+
+            });
+
+            console.log("authStatus " + authStatus)
+
+            /*axios.get('/verify')
                 .then((res) => {
                     if(res.data.verified !== true){
                         helper.logout(redirectPath)
@@ -205,12 +216,13 @@
                 })
                 .catch((e) => {
                     helper.logout(redirectPath)
-                })
+                })*/
 
             this.countries = countries;
             $('#postedJobs').on('shown.bs.collapse', () => {
                 this.getJobs();
             })
+
             // Decrypt
             /* var bytes = CryptoJS.AES.decrypt(ciphertext, sKey);
             var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));

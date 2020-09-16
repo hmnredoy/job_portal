@@ -28,6 +28,7 @@ Route::get('verify',        [AuthController::class, 'verifyUser']);
 Route::get('jobs',          [JobController::class, 'index']);
 Route::get('all-jobs',      [JobController::class, 'allJobs']);
 Route::post('change-job-status', [JobController::class, 'changeStatus']);
+Route::post('apply',        [JobController::class, 'apply']);
 
 Route::get('{path}', function () {
     return view('index');

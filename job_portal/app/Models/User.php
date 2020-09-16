@@ -34,5 +34,22 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'skills' => 'array',
     ];
+
+    /*public function jobs(){
+        $this->hasManyThrough(Job::class, JobApplicant::class);
+    }*/
+
+    public function jobs()
+    {
+        return $this->belongsToMany(Job::class, 'job_applicants')->withTimestamps();
+    }
+
+/*
+    public function appliedJobs()
+    {
+        return $this->belongsToMany('App\Models\Job')
+            ->using('App\Models\JobApplicant');
+    }*/
 }

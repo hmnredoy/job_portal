@@ -5,15 +5,13 @@
 
     <div class="container">
         <div class="card">
-            <div class="card-body">
+            <h2 class="pl-2">Welcome {{businessName}}
+                <span class="text-muted">({{type}})</span>
+            </h2>
+            <div class="card-body" v-if=" type === 'company' ">
                 <button class="btn btn-default mb-2" type="button" data-toggle="collapse"
                  data-target="#postedJobs" aria-expanded="false">
                     Posted Jobs
-                </button>
-
-                 <button class="btn btn-default mb-2" type="button" data-toggle="collapse"
-                 data-target="#applications" aria-expanded="false">
-                    Applications
                 </button>
 
                  <button class="btn btn-success mb-2 float-right" type="button" data-toggle="collapse"
@@ -57,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="collapse mb-2" id="postedJobs">
+               <div class="collapse mb-2" id="postedJobs">
                     <div class="card">
                         <div class="card-header">
                             <h2>Job list</h2>
@@ -88,6 +86,7 @@
                                     <td>
                                         <button class="btn btn-xs btn-success" v-if="!job.status" @click="changeJobStatus(job.id)">Activate</button>
                                         <button class="btn btn-xs btn-danger" v-else @click="changeJobStatus(job.id)">Deactivate</button>
+                                        <button class="btn btn-xs btn-info" @click="applicants(job.id, job.title)">Applicants</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -99,43 +98,36 @@
                     </div>
                 </div>
 
-                <div class="collapse" id="applications">
+               <div class="collapse" id="applications">
                     <div class="card card-body">
                         <div class="card">
                             <div class="card-header">
                                 <h2>Applicant list</h2>
+                                <br>
+                                <h4>{{ selectedJobTitle }}</h4>
                             </div>
                             <div class="card-body table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
                                         <th scope="col">#ID</th>
-                                        <th scope="col">title</th>
-                                        <th scope="col">description</th>
-                                        <th scope="col">salary</th>
-                                        <th scope="col">location</th>
-                                        <th scope="col">country</th>
-                                        <th scope="col">status</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Applied At</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="job in jobs.data" :key="job.id">
-                                        <th scope="row">{{ job.id }}</th>
-                                        <td>{{ job.title }}</td>
-                                        <td>{{ job.description | str_limit(5) }}</td>
-                                        <td>{{ job.salary }}</td>
-                                        <td>{{ job.location }}</td>
-                                        <td>{{ job.country }}</td>
-                                        <td>{{ job.status | status }}</td>
-                                        <td>
-                                            <button class="btn btn-xs btn-success" v-if="!job.status" @click="changeJobStatus(job.id)">Activate</button>
-                                            <button class="btn btn-xs btn-danger" v-else @click="changeJobStatus(job.id)">Deactivate</button>
-                                        </td>
+                                    <tr v-for="application in applications.data" :key="application.id">
+                                        <th scope="row">{{ application.id }}</th>
+                                        <td>{{ application.user.firstName }}</td>
+                                        <td>{{ application.user.lastName }}</td>
+                                        <td>{{ application.user.email }}</td>
+                                        <td>{{ application.created_at | dateFormat }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
-                                <pagination :data="jobs" @pagination-change-page="getJobs"></pagination>
+                                <pagination :data="jobs" @pagination-change-page="getApplications"></pagination>
                             </div>
                         </div>
                     </div>
@@ -165,10 +157,22 @@
               },
               countries: [],
               errors: null,
-              jobs: null
+              jobs: [],
+              applications: [],
+              selectedJobID: null,
+              selectedJobTitle: null,
+              businessName: null,
+              type: null
           }
         },
         methods: {
+            applicants(jobID, jobTitle){
+                $('#applications').collapse('dispose')
+
+                this.selectedJobID = jobID
+                this.selectedJobTitle = jobTitle
+                $('#applications').collapse('toggle')
+            },
             changeJobStatus(id){
                 axios.post('/change-job-status', {jobID : id}).then((res) => {
                     if(res.data.status === 'success') {
@@ -182,6 +186,7 @@
             createJob(){
                 axios.post('/create-job', this.job).then((res) => {
                     if(res.data.status === 'success'){
+                        this.getJobs();
                         $('#createJob').collapse('hide')
                         $('#postedJobs').collapse('show')
                     }
@@ -195,38 +200,37 @@
                 .then(response => {
                     this.jobs = response.data;
                 });
-            }
+            },
+            getApplications(page = 1){
+                axios.get('/applications/'+this.selectedJobID+'&page=' + page)
+                .then(response => {
+                    this.applications = response.data;
+                });
+            },
+            getUserData(){
+                axios.get('/user?token=' + helper.getFromLocal("token"))
+                    .then((res) => {
+                        this.businessName = res.data.businessName
+                        this.type = res.data.type
+                        console.log(res)
+                    })
+                    .catch((e) => {
+                        alert('Something went wrong!')
+                        helper.logout()
+                    })
+            },
         },
         mounted() {
-            console.log('dashboard mounted')
-            let authStatus = false
-            helper.checkAuth({preventRedirect: true}).then(res => {
-                authStatus = res
-                console.log("auth " + authStatus)
-
-            });
-
-            console.log("authStatus " + authStatus)
-
-            /*axios.get('/verify')
-                .then((res) => {
-                    if(res.data.verified !== true){
-                        helper.logout(redirectPath)
-                    }
-                })
-                .catch((e) => {
-                    helper.logout(redirectPath)
-                })*/
-
+            this.getUserData()
             this.countries = countries;
             $('#postedJobs').on('shown.bs.collapse', () => {
+                $('#applications').collapse('hide')
                 this.getJobs();
             })
 
-            // Decrypt
-            /* var bytes = CryptoJS.AES.decrypt(ciphertext, sKey);
-            var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-            console.log(decryptedData); */
+            $('#applications').on('shown.bs.collapse', () => {
+                this.getApplications();
+            })
 
         },
     }

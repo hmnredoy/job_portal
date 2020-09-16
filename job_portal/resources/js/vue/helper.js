@@ -3,8 +3,6 @@ import router from './router';
 
 let helper = {
     setToLocal(key, value, ttl = 1800000) { // 30 Minutes
-        console.log('in setToLocal')
-
         const now = new Date()
         const item = {
             value: value,
@@ -13,34 +11,27 @@ let helper = {
         localStorage.setItem(key, JSON.stringify(item))
     },
     getFromLocal(key) {
-        console.log('in getFromLocal')
-
+        console.log('get from local '+key)
         const itemStr = localStorage.getItem(key)
-        // if the item doesn't exist, return null
         if (!itemStr) {
             return null
         }
         const item = JSON.parse(itemStr)
-
         const now = new Date()
-        // compare the expiry time of the item with the current time
 
         if (now.getTime() > item.expiry) {
-            // If the item is expired, delete the item from storage
-            // and return null
             localStorage.removeItem(key)
             return null
         }
         return item.value
     },
     async checkAuth(config) {
-        console.log('in checkauth')
         let redirectPath = config.redirectPath ?? '/'
         let logout = config.logout ?? true
         let preventRedirect = config.preventRedirect ?? false
         let returnVal = false
 
-        let token = localStorage.getItem('token')
+        let token = this.getFromLocal('token')
         if (token) {
             await axios.get('/verify')
                 .then((res) => {
@@ -58,9 +49,7 @@ let helper = {
         return returnVal
     },
     logout(redirectPath = '/'){
-        console.log('in logout')
-
-        axios.get('/logout').then(() => {
+        axios.post('/logout').then(() => {
             store.commit("setLogin", false)
             localStorage.removeItem('token')
             localStorage.removeItem('user')

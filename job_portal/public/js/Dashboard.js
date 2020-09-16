@@ -152,14 +152,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -176,10 +168,21 @@ __webpack_require__.r(__webpack_exports__);
       },
       countries: [],
       errors: null,
-      jobs: null
+      jobs: [],
+      applications: [],
+      selectedJobID: null,
+      selectedJobTitle: null,
+      businessName: null,
+      type: null
     };
   },
   methods: {
+    applicants: function applicants(jobID, jobTitle) {
+      $('#applications').collapse('dispose');
+      this.selectedJobID = jobID;
+      this.selectedJobTitle = jobTitle;
+      $('#applications').collapse('toggle');
+    },
     changeJobStatus: function changeJobStatus(id) {
       var _this = this;
 
@@ -198,6 +201,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/create-job', this.job).then(function (res) {
         if (res.data.status === 'success') {
+          _this2.getJobs();
+
           $('#createJob').collapse('hide');
           $('#postedJobs').collapse('show');
         }
@@ -212,38 +217,41 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/jobs?page=' + page).then(function (response) {
         _this3.jobs = response.data;
       });
+    },
+    getApplications: function getApplications() {
+      var _this4 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('/applications/' + this.selectedJobID + '&page=' + page).then(function (response) {
+        _this4.applications = response.data;
+      });
+    },
+    getUserData: function getUserData() {
+      var _this5 = this;
+
+      axios.get('/user?token=' + _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].getFromLocal("token")).then(function (res) {
+        _this5.businessName = res.data.businessName;
+        _this5.type = res.data.type;
+        console.log(res);
+      })["catch"](function (e) {
+        alert('Something went wrong!');
+        _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].logout();
+      });
     }
   },
   mounted: function mounted() {
-    var _this4 = this;
+    var _this6 = this;
 
-    console.log('dashboard mounted');
-    var authStatus = false;
-    _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].checkAuth({
-      preventRedirect: true
-    }).then(function (res) {
-      authStatus = res;
-      console.log("auth " + authStatus);
-    });
-    console.log("authStatus " + authStatus);
-    /*axios.get('/verify')
-        .then((res) => {
-            if(res.data.verified !== true){
-                helper.logout(redirectPath)
-            }
-        })
-        .catch((e) => {
-            helper.logout(redirectPath)
-        })*/
-
+    this.getUserData();
     this.countries = _libraries_countries__WEBPACK_IMPORTED_MODULE_0__["default"];
     $('#postedJobs').on('shown.bs.collapse', function () {
-      _this4.getJobs();
-    }); // Decrypt
+      $('#applications').collapse('hide');
 
-    /* var bytes = CryptoJS.AES.decrypt(ciphertext, sKey);
-    var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    console.log(decryptedData); */
+      _this6.getJobs();
+    });
+    $('#applications').on('shown.bs.collapse', function () {
+      _this6.getApplications();
+    });
   }
 });
 
@@ -271,487 +279,498 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default mb-2",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "collapse",
-                  "data-target": "#postedJobs",
-                  "aria-expanded": "false"
-                }
-              },
-              [_vm._v("\n                Posted Jobs\n            ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default mb-2",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "collapse",
-                  "data-target": "#applications",
-                  "aria-expanded": "false"
-                }
-              },
-              [_vm._v("\n                Applications\n            ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success mb-2 float-right",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "collapse",
-                  "data-target": "#createJob",
-                  "aria-expanded": "false"
-                }
-              },
-              [_vm._v("\n                Create Job +\n            ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "collapse mb-2", attrs: { id: "createJob" } },
-              [
+          _c("h2", { staticClass: "pl-2" }, [
+            _vm._v("Welcome " + _vm._s(_vm.businessName) + "\n            "),
+            _c("span", { staticClass: "text-muted" }, [
+              _vm._v("(" + _vm._s(_vm.type) + ")")
+            ])
+          ]),
+          _vm._v(" "),
+          _vm.type === "company"
+            ? _c("div", { staticClass: "card-body" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default mb-2",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "collapse",
+                      "data-target": "#postedJobs",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [_vm._v("\n                Posted Jobs\n            ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success mb-2 float-right",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "collapse",
+                      "data-target": "#createJob",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [_vm._v("\n                Create Job +\n            ")]
+                ),
+                _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "card card-body" },
+                  { staticClass: "collapse mb-2", attrs: { id: "createJob" } },
                   [
                     _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.createJob($event)
-                          }
-                        }
-                      },
+                      "div",
+                      { staticClass: "card card-body" },
                       [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", { attrs: { for: "j_title" } }, [
-                            _vm._v("Job Title")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.job.title,
-                                expression: "job.title"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "text",
-                              id: "j_title",
-                              autofocus: ""
-                            },
-                            domProps: { value: _vm.job.title },
+                        _c(
+                          "form",
+                          {
                             on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(_vm.job, "title", $event.target.value)
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.createJob($event)
                               }
                             }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", { attrs: { for: "description" } }, [
-                            _vm._v("Description")
-                          ]),
-                          _vm._v(" "),
-                          _c("textarea", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.job.description,
-                                expression: "job.description"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { id: "description", rows: "3" },
-                            domProps: { value: _vm.job.description },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                          },
+                          [
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "j_title" } }, [
+                                _vm._v("Job Title")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.job.title,
+                                    expression: "job.title"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  id: "j_title",
+                                  autofocus: ""
+                                },
+                                domProps: { value: _vm.job.title },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.job,
+                                      "title",
+                                      $event.target.value
+                                    )
+                                  }
                                 }
-                                _vm.$set(
-                                  _vm.job,
-                                  "description",
-                                  $event.target.value
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "description" } }, [
+                                _vm._v("Description")
+                              ]),
+                              _vm._v(" "),
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.job.description,
+                                    expression: "job.description"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { id: "description", rows: "3" },
+                                domProps: { value: _vm.job.description },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.job,
+                                      "description",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group" },
+                              [
+                                _c("label", { attrs: { for: "Salary" } }, [
+                                  _vm._v("Salary")
+                                ]),
+                                _vm._v(" "),
+                                _c("currency-input", {
+                                  attrs: { currency: "৳", id: "Salary" },
+                                  model: {
+                                    value: _vm.job.salary,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.job, "salary", $$v)
+                                    },
+                                    expression: "job.salary"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "Location" } }, [
+                                _vm._v("Location")
+                              ]),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.job.location,
+                                    expression: "job.location"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "text", id: "Location" },
+                                domProps: { value: _vm.job.location },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.job,
+                                      "location",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c("label", { attrs: { for: "country" } }, [
+                                _vm._v("Country")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.job.country,
+                                      expression: "job.country"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: { id: "country" },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.job,
+                                        "country",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                _vm._l(_vm.countries, function(country, index) {
+                                  return _c(
+                                    "option",
+                                    { domProps: { value: country.name } },
+                                    [_vm._v(_vm._s(country.name))]
+                                  )
+                                }),
+                                0
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "form-group form-check" },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.job.status,
+                                      expression: "job.status"
+                                    }
+                                  ],
+                                  staticClass: "form-check-input",
+                                  attrs: { type: "checkbox", id: "status" },
+                                  domProps: {
+                                    checked: Array.isArray(_vm.job.status)
+                                      ? _vm._i(_vm.job.status, null) > -1
+                                      : _vm.job.status
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$a = _vm.job.status,
+                                        $$el = $event.target,
+                                        $$c = $$el.checked ? true : false
+                                      if (Array.isArray($$a)) {
+                                        var $$v = null,
+                                          $$i = _vm._i($$a, $$v)
+                                        if ($$el.checked) {
+                                          $$i < 0 &&
+                                            _vm.$set(
+                                              _vm.job,
+                                              "status",
+                                              $$a.concat([$$v])
+                                            )
+                                        } else {
+                                          $$i > -1 &&
+                                            _vm.$set(
+                                              _vm.job,
+                                              "status",
+                                              $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1))
+                                            )
+                                        }
+                                      } else {
+                                        _vm.$set(_vm.job, "status", $$c)
+                                      }
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-check-label",
+                                    attrs: { for: "status" }
+                                  },
+                                  [_vm._v("Active")]
                                 )
-                              }
-                            }
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-success float-right",
+                                attrs: { type: "submit" }
+                              },
+                              [_vm._v("Save")]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("Errors", { attrs: { errors: _vm.errors } })
+                      ],
+                      1
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "collapse mb-2", attrs: { id: "postedJobs" } },
+                  [
+                    _c("div", { staticClass: "card" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "card-body table-responsive" },
+                        [
+                          _c("table", { staticClass: "table" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.jobs.data, function(job) {
+                                return _c("tr", { key: job.id }, [
+                                  _c("th", { attrs: { scope: "row" } }, [
+                                    _vm._v(_vm._s(job.id))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(job.title))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm._f("str_limit")(job.description, 5)
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(job.salary))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(job.location))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(job.country))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _vm._v(_vm._s(_vm._f("status")(job.status)))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    !job.status
+                                      ? _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-xs btn-success",
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.changeJobStatus(
+                                                  job.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Activate")]
+                                        )
+                                      : _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-xs btn-danger",
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.changeJobStatus(
+                                                  job.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Deactivate")]
+                                        ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-xs btn-info",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.applicants(
+                                              job.id,
+                                              job.title
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Applicants")]
+                                    )
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("pagination", {
+                            attrs: { data: _vm.jobs },
+                            on: { "pagination-change-page": _vm.getJobs }
                           })
+                        ],
+                        1
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "collapse", attrs: { id: "applications" } },
+                  [
+                    _c("div", { staticClass: "card card-body" }, [
+                      _c("div", { staticClass: "card" }, [
+                        _c("div", { staticClass: "card-header" }, [
+                          _c("h2", [_vm._v("Applicant list")]),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c("h4", [_vm._v(_vm._s(_vm.selectedJobTitle))])
                         ]),
                         _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "form-group" },
+                          { staticClass: "card-body table-responsive" },
                           [
-                            _c("label", { attrs: { for: "Salary" } }, [
-                              _vm._v("Salary")
+                            _c("table", { staticClass: "table" }, [
+                              _vm._m(2),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                _vm._l(_vm.applications.data, function(
+                                  application
+                                ) {
+                                  return _c("tr", { key: application.id }, [
+                                    _c("th", { attrs: { scope: "row" } }, [
+                                      _vm._v(_vm._s(application.id))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(application.user.firstName))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(application.user.lastName))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(_vm._s(application.user.email))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm._f("dateFormat")(
+                                            application.created_at
+                                          )
+                                        )
+                                      )
+                                    ])
+                                  ])
+                                }),
+                                0
+                              )
                             ]),
                             _vm._v(" "),
-                            _c("currency-input", {
-                              attrs: { currency: "৳", id: "Salary" },
-                              model: {
-                                value: _vm.job.salary,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.job, "salary", $$v)
-                                },
-                                expression: "job.salary"
+                            _c("pagination", {
+                              attrs: { data: _vm.jobs },
+                              on: {
+                                "pagination-change-page": _vm.getApplications
                               }
                             })
                           ],
                           1
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", { attrs: { for: "Location" } }, [
-                            _vm._v("Location")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.job.location,
-                                expression: "job.location"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { type: "text", id: "Location" },
-                            domProps: { value: _vm.job.location },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.job,
-                                  "location",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", { attrs: { for: "country" } }, [
-                            _vm._v("Country")
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.job.country,
-                                  expression: "job.country"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { id: "country" },
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.job,
-                                    "country",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                }
-                              }
-                            },
-                            _vm._l(_vm.countries, function(country, index) {
-                              return _c(
-                                "option",
-                                { domProps: { value: country.name } },
-                                [_vm._v(_vm._s(country.name))]
-                              )
-                            }),
-                            0
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group form-check" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.job.status,
-                                expression: "job.status"
-                              }
-                            ],
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", id: "status" },
-                            domProps: {
-                              checked: Array.isArray(_vm.job.status)
-                                ? _vm._i(_vm.job.status, null) > -1
-                                : _vm.job.status
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.job.status,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        _vm.job,
-                                        "status",
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        _vm.job,
-                                        "status",
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
-                                } else {
-                                  _vm.$set(_vm.job, "status", $$c)
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "label",
-                            {
-                              staticClass: "form-check-label",
-                              attrs: { for: "status" }
-                            },
-                            [_vm._v("Active")]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-success float-right",
-                            attrs: { type: "submit" }
-                          },
-                          [_vm._v("Save")]
                         )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("Errors", { attrs: { errors: _vm.errors } })
-                  ],
-                  1
+                      ])
+                    ])
+                  ]
                 )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "collapse mb-2", attrs: { id: "postedJobs" } },
-              [
-                _c("div", { staticClass: "card" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "card-body table-responsive" },
-                    [
-                      _c("table", { staticClass: "table" }, [
-                        _vm._m(1),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.jobs.data, function(job) {
-                            return _c("tr", { key: job.id }, [
-                              _c("th", { attrs: { scope: "row" } }, [
-                                _vm._v(_vm._s(job.id))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.title))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm._f("str_limit")(job.description, 5)
-                                  )
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.salary))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.location))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(job.country))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _vm._v(_vm._s(_vm._f("status")(job.status)))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [
-                                !job.status
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-xs btn-success",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.changeJobStatus(job.id)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Activate")]
-                                    )
-                                  : _c(
-                                      "button",
-                                      {
-                                        staticClass: "btn btn-xs btn-danger",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.changeJobStatus(job.id)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Deactivate")]
-                                    )
-                              ])
-                            ])
-                          }),
-                          0
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("pagination", {
-                        attrs: { data: _vm.jobs },
-                        on: { "pagination-change-page": _vm.getJobs }
-                      })
-                    ],
-                    1
-                  )
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "collapse", attrs: { id: "applications" } },
-              [
-                _c("div", { staticClass: "card card-body" }, [
-                  _c("div", { staticClass: "card" }, [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "card-body table-responsive" },
-                      [
-                        _c("table", { staticClass: "table" }, [
-                          _vm._m(3),
-                          _vm._v(" "),
-                          _c(
-                            "tbody",
-                            _vm._l(_vm.jobs.data, function(job) {
-                              return _c("tr", { key: job.id }, [
-                                _c("th", { attrs: { scope: "row" } }, [
-                                  _vm._v(_vm._s(job.id))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.title))]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm._f("str_limit")(job.description, 5)
-                                    )
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.salary))]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.location))]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(job.country))]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _vm._v(_vm._s(_vm._f("status")(job.status)))
-                                ]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  !job.status
-                                    ? _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-xs btn-success",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.changeJobStatus(job.id)
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Activate")]
-                                      )
-                                    : _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-xs btn-danger",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.changeJobStatus(job.id)
-                                            }
-                                          }
-                                        },
-                                        [_vm._v("Deactivate")]
-                                      )
-                                ])
-                              ])
-                            }),
-                            0
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("pagination", {
-                          attrs: { data: _vm.jobs },
-                          on: { "pagination-change-page": _vm.getJobs }
-                        })
-                      ],
-                      1
-                    )
-                  ])
-                ])
-              ]
-            )
-          ])
+              ])
+            : _vm._e()
         ])
       ])
     ],
@@ -795,31 +814,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h2", [_vm._v("Applicant list")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("#ID")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("title")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("First Name")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("description")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Last Name")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("salary")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Email")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("location")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("country")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("status")]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Action")])
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Applied At")])
       ])
     ])
   }

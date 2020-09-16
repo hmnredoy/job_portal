@@ -10,7 +10,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
-/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../router */ "./resources/js/vue/router.js");
 //
 //
 //
@@ -45,7 +44,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
@@ -63,7 +61,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.jobs = response.data;
       });
     },
-    apply: function apply() {
+    apply: function apply(jobID) {
       var _this2 = this;
 
       _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].checkAuth({
@@ -72,8 +70,15 @@ __webpack_require__.r(__webpack_exports__);
         var token = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].getFromLocal('token');
         !res ? _this2.$router.push({
           path: '/login'
-        }) : axios.post('/apply', token).then(function (res) {
-          console.log(res);
+        }) : axios.post('/apply', {
+          token: token,
+          jobID: jobID
+        }).then(function (res) {
+          if (res.data.status === 'success') {
+            alert('Applied Successfully!');
+          }
+        })["catch"](function (e) {
+          alert(typeof e.response.data.message !== 'undefined' ? e.response.data.message : 'Something went wrong!');
         });
       });
     }
@@ -175,7 +180,11 @@ var render = function() {
                             {
                               staticClass: "btn btn-sm btn-success",
                               attrs: { type: "button" },
-                              on: { click: _vm.apply }
+                              on: {
+                                click: function($event) {
+                                  return _vm.apply(job.id)
+                                }
+                              }
                             },
                             [_vm._v("Apply")]
                           )

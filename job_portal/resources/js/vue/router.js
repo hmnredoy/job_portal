@@ -52,17 +52,17 @@ router.beforeEach((to, from, next) => {
         return opeRouteNames.includes(x.name)
     })
 
-    // helper.setToLocal('previousURL', from.path)
-    let currentUser = helper.getFromLocal("token")
-    // console.log(currentUser)
-    console.log('router -- ' + !open && !currentUser)
-
-    if(!open && !currentUser) {
-        next('/')
-    }
-    else {
-        next()
-    }
+    helper.setToLocal('previousURL', from.path)
+    helper.checkAuth({preventRedirect: true}).then(res => {
+        if(!open && !res) {
+            helper.logout()
+            next('/')
+        }
+        else {
+            helper.setToLocal("token", helper.getFromLocal("token"))
+            next()
+        }
+    })
 })
 
 export default router;

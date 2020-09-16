@@ -38,7 +38,7 @@
         name: "Navbar",
         computed: {
             loggedIn(){
-                return this.$store.state.loggedIn || localStorage.getItem("token")
+                return this.$store.state.loggedIn || helper.getFromLocal("token")
             }
         },
         methods: {

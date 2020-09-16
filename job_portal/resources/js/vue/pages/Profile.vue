@@ -7,15 +7,15 @@
         <div class="card">
             <div class="card-body d-flex justify-content-center">
 
-                <form @submit.prevent="register" class="col-md-6">
+                <div class="col-md-6">
                     <div class="text-center mb-4">
                         <h1 class="h3 mb-3 font-weight-normal">Profile</h1>
                     </div>
-                    <div class="profile-image-wrapper">
+                    <div class="profile-image-wrapper" v-if="user.type === 'applicant'">
                         <img :src="profileImage" alt="profile-image" class="profile-image" width="100">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" v-if="user.type === 'applicant'">
                         <label for="pPhoto">Profile Photo</label>
                         <input type="file" class="form-control-file" id="pPhoto" @change="setPhoto($event)">
                     </div>
@@ -26,17 +26,24 @@
                     <div class="form-group">
                         <input type="text" v-model="user.lastName" class="form-control" placeholder="Last Name">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" v-if="user.type === 'company'">
                         <input type="text" v-model="user.businessName" class="form-control" placeholder="Business Name">
                     </div>
 
-                    <div class="form-group">
-                        <input type="text" v-model="profile.skills" class="form-control" placeholder="Skills">
+                    <div class="form-group" v-if="user.type === 'applicant'">
+                        <label>Skills:</label>
+                        <div style="display: inline-block;">
+                            <span class="text-muted" v-for="(skill, index) in user.skills" :key="index">
+                                <span>{{skill}}, </span>
+                            </span>
+                        </div>
+
+                        <input type="text" v-model="skill" @keydown.enter.prevent="addSkill" class="form-control" placeholder="Write skill and press Enter">
                     </div>
 
-                    <div class="profile-image-wrapper mb-2">
+                    <div class="profile-image-wrapper mb-2" v-if="user.type === 'applicant'">
                         <label for="cv">Select CV</label>
-                        <input type="file" class="form-control-file" id="cv">
+                        <input type="file" class="form-control-file" id="cv" @change="setCV($event)">
                     </div>
 
                     <hr>
@@ -53,7 +60,7 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+                    <button class="btn btn-lg btn-primary btn-block" @click="saveData">Update</button>
 
                     <div v-if="errors" class="alert alert-danger mt-4 rounded font-bold mb-4 shadow-lg">
                         <div v-for="(v, k) in errors" :key="k">
@@ -62,7 +69,7 @@
                             </p>
                         </div>
                     </div>
-                </form>
+                </div>
 
             </div>
         </div>
@@ -72,6 +79,8 @@
 </template>
 
 <script>
+    import {helper} from "../helper";
+
     export default {
         name: "Profile",
         data() {
@@ -82,17 +91,22 @@
                     lastName: null,
                     businessName: null,
                     email: null,
-                    password: null
-                },
-                profile: {
+                    password: null,
                     image: null,
-                    skills: null
+                    cv: null,
+                    skills: []
                 },
                 errors: null,
-                profileImage: '/storage/images/profile.png'
+                profileImage: '/storage/images/profile.png',
+                skill: null,
+
             }
         },
         methods: {
+            addSkill(){
+                this.user.skills.push(this.skill)
+                this.skill = null
+            },
             setPhoto(e){
                 let file = e.target.files[0];
                 let reader = new FileReader();
@@ -101,15 +115,46 @@
                     this.profileImage = reader.result
                 }
                 reader.readAsDataURL(file);
+
+                this.user.image = file
+            },
+            setCV(e){
+                this.user.cv = e.target.files[0];
             },
             getUserData(){
-                 axios.post('/user', {token: localStorage.getItem("token")})
-                .then((res) => {
+                axios.get('/user?token=' + helper.getFromLocal("token"))
+                    .then((res) => {
+                        Object.assign(this.user, res.data)
+                        console.log(res)
+                    })
+                    .catch((e) => {
+                        this.errors = e.response.data.errors
+                    })
+            },
+            saveData(){
 
-                })
-                .catch((e) => {
-                    this.errors = e.response.data.errors
-                })
+                 let formData = new FormData();
+                 let image = this.user.image.files[0] ?? null
+                 let cv = this.user.cv.files[0] ?? null
+                 formData.append("image", image);
+                 formData.append("cv", cv);
+                //
+               //  let data = Object.assign(this.user, formData, {token: helper.getFromLocal("token")},{_method: 'patch'})
+
+                console.log(formData)
+
+                /*axios.post('/user',data,
+                {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then((res) => {
+                        console.log(res)
+                    })
+                    .catch((e) => {
+                        this.errors = e.response.data.errors
+                    })*/
             }
         },
         mounted() {

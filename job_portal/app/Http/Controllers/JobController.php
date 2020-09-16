@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\JobApplicant;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
     public function index(){
-       return Job::latest()->paginate(10);
+       return Job::where('user_id', auth()->id())->latest()->paginate(10);
     }
 
     public function allJobs(){
@@ -37,6 +39,25 @@ class JobController extends Controller
     }
 
     public function apply(Request $request){
-        dd($request->all());
+        if($request->filled('token') && $request->filled('jobID')){
+            $decoded = $this->decodeJWT($request->token);
+
+            $user = User::where('email', $decoded->email)->first();
+            $job = Job::find($request->jobID);
+
+            if($user && $job){
+                $alreadyApplied = JobApplicant::where('user_id', $user->id)->where('job_id', $job->id)->exists();
+                if($alreadyApplied){
+                    return response(['status' => 'failed', 'message' => 'Already applied!'], 422);
+                }
+                $user->jobs()->attach($job->id);
+                return ['status' => 'success'];
+            }
+        }
+        return response(['status' => 'failed', 'message' => 'Something went wrong!'], 422);
+    }
+
+    public function applications($jobID){
+        return JobApplicant::where('job_id', $jobID)->with('user')->latest()->paginate(10);
     }
 }

@@ -15,9 +15,12 @@ class CreateJobApplicantsTable extends Migration
     {
         Schema::create('job_applicants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->unsignedBigInteger('job_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('job_id')->references('id')->on('jobs');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,6 +31,6 @@ class CreateJobApplicantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_applicant');
+        Schema::dropIfExists('job_applicants');
     }
 }

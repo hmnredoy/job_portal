@@ -9,7 +9,10 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
+
 //
 //
 //
@@ -61,16 +64,13 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/login', this.user).then(function (res) {
         _this.errors = null;
-        _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].setToLocal("token", res.data.token);
-        _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].setToLocal("user", {
-          "name": res.data.name
-        });
+        _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].setToLocal("token", res.data.token);
 
         _this.$store.commit("setLogin", true);
 
         _this.$store.commit("setUserName", res.data.name);
 
-        var previousURL = _helper__WEBPACK_IMPORTED_MODULE_0__["helper"].getFromLocal('previousURL');
+        var previousURL = _helper__WEBPACK_IMPORTED_MODULE_1__["helper"].getFromLocal('previousURL');
         previousURL ? _this.$router.push({
           path: previousURL
         }) : _this.$router.push({

@@ -19,16 +19,20 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::post('register',     [AuthController::class, 'register']);
-Route::post('login',        [AuthController::class, 'login']);
-Route::get('logout',        [AuthController::class, 'logout']);
-Route::post('user',         [UserController::class, 'getUser']);
-Route::post('create-job',   [JobController::class,  'store']);
-Route::get('verify',        [AuthController::class, 'verifyUser']);
-Route::get('jobs',          [JobController::class, 'index']);
-Route::get('all-jobs',      [JobController::class, 'allJobs']);
-Route::post('change-job-status', [JobController::class, 'changeStatus']);
-Route::post('apply',        [JobController::class, 'apply']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login',    [AuthController::class, 'login']);
+Route::post( 'logout',  [AuthController::class, 'logout']);
+Route::get( 'verify',   [AuthController::class, 'verifyUser']);
+
+Route::get('user',      [UserController::class, 'index']);
+Route::patch('user',    [UserController::class, 'update']);
+
+Route::post('create-job',         [JobController::class, 'store']);
+Route::get( 'jobs',               [JobController::class, 'index']);
+Route::get( 'all-jobs',           [JobController::class, 'allJobs']);
+Route::post('change-job-status',  [JobController::class, 'changeStatus']);
+Route::post('apply',              [JobController::class, 'apply']);
+Route::get( 'applications/{id}',       [JobController::class, 'applications']);
 
 Route::get('{path}', function () {
     return view('index');

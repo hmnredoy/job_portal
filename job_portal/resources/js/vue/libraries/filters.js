@@ -18,3 +18,7 @@ Vue.filter('status', (value) => {
 Vue.filter('fromNow', (date) => {
     return moment(date).startOf('hour').fromNow();
 });
+
+Vue.filter('dateFormat', (date) => {
+    return moment(date).format('MMMM Do YYYY, h:mm:ss a');
+});

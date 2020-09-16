@@ -9,14 +9,26 @@ use \Firebase\JWT\JWT;
 class UserController extends Controller
 {
 
-    public function getUser(Request $request)
+    public function index(Request $request)
     {
-        $decoded = JWT::decode($request->token, env('SECRET_KEY', 'ABC-SECRET-123'), array('HS256'));
+        $decoded = $this->decodeJWT($request->token);
+        return User::where('email', $decoded->email)
+            ->first()
+            ->only('firstName',
+            'lastName',
+            'email',
+            'image',
+            'type',
+            'businessName'
+            );
+    }
 
-        $email = $decoded->email;
+    public function update(Request $request)
+    {
+        dd($request->all());
+        $decoded = $this->decodeJWT($request->token);
+        $user = User::where('email', $decoded->email)->first();
 
-        $user = User::where('email', $email)->first();
-
-        dd($decoded);
+        dd($user);
     }
 }

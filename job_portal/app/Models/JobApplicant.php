@@ -5,16 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class JobApplicant extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
-    public function owner(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function applicants() {
-        return $this->belongsToMany(User::class, 'job_applicants')->withTimestamps();
+    public function job()
+    {
+        return $this->belongsTo(Job::class);
     }
+
 }

@@ -17,7 +17,7 @@
                                 <p class="card-text">{{job.description}}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">{{job.created_at | fromNow}}</small>
-                                    <button type="button" class="btn btn-sm btn-success" @click="apply">Apply</button>
+                                    <button type="button" class="btn btn-sm btn-success" @click="apply(job.id)">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -34,8 +34,6 @@
 
 <script>
     import {helper} from "../helper";
-    import router from "../router";
-
     export default {
         name: "Home",
         data() {
@@ -50,12 +48,16 @@
                     this.jobs = response.data;
                 });
             },
-            apply(){
+            apply(jobID){
                 helper.checkAuth({preventRedirect: true}).then(res => {
                     const token = helper.getFromLocal('token')
                     !res ? this.$router.push({path: '/login'}) :
-                    axios.post('/apply', token).then((res) => {
-                        console.log(res)
+                    axios.post('/apply', {token, jobID}).then((res) => {
+                        if(res.data.status === 'success'){
+                            alert('Applied Successfully!')
+                        }
+                    }).catch(e => {
+                        alert(typeof e.response.data.message !== 'undefined' ? e.response.data.message : 'Something went wrong!')
                     })
                 })
             }

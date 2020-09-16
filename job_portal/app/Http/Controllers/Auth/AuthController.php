@@ -44,7 +44,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             unset($user['id']);
-            return ['status' => 'success', 'token' => $this->makeToken($user), 'name' => $user->firstName];
+            return ['status' => 'success', 'token' => $this->makeToken($user), 'user' => $user->only('firstName', 'lastName', 'businessName', 'type')];
         }else{
             return response(['errors' => ['password' => ['Wrong credentials!']]], 422);
         }

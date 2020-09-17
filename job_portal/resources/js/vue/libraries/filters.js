@@ -22,3 +22,7 @@ Vue.filter('fromNow', (date) => {
 Vue.filter('dateFormat', (date) => {
     return moment(date).format('MMMM Do YYYY, h:mm:ss a');
 });
+
+Vue.filter('numberFormat', (number) => {
+    return (new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number));
+});

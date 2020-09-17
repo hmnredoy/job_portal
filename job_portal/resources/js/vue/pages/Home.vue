@@ -11,7 +11,7 @@
                     <div class="thumbnail card">
                         <div class="caption card-body">
                             <h4 class="group card-title inner list-group-item-heading">{{job.title}}</h4>
-                            <p class="group inner list-group-item-text">{{job.description}}</p>
+                            <p class="group inner list-group-item-text">{{job.description | str_limit(100)}}</p>
                             <div class="mt-2 badge badge-pill">
                                 Company: {{job.owner.businessName}}
                             </div>
@@ -27,7 +27,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="float-left">
                                         <p class="lead">
-                                            BDT {{job.salary}}</p>
+                                            BDT {{job.salary | numberFormat}}</p>
                                         <small class="text-muted">{{job.created_at | fromNow}}</small>
                                     </div>
                                     <div class="float-right">

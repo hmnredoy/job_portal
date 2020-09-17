@@ -5,7 +5,7 @@
 
     <div class="container">
         <div class="card">
-            <h2 class="pl-2">Welcome {{user.name}}
+            <h2 class="pl-2">Welcome {{name}}
                 <span class="text-muted">({{user.type}})</span>
             </h2>
             <div class="card-body" v-if="user.type === 'company'">
@@ -21,7 +21,7 @@
 
                 <div class="collapse mb-2" id="createJob">
                     <div class="card card-body">
-                        <form @submit.prevent="createJob" ref="jobForm">
+                        <form @submit.prevent="createJob($event)" ref="jobForm">
                             <div class="form-group">
                                 <label for="j_title">Job Title</label>
                                 <input v-model="job.title" type="text" class="form-control" id="j_title" autofocus>
@@ -196,7 +196,9 @@
               selectedJobID: null,
               selectedJobTitle: null,
               user: null,
-              appliedJobs: {}
+              appliedJobs: {},
+              name: null,
+              copyOfJob: null
           }
         },
         methods: {
@@ -219,15 +221,19 @@
                     alert('Sorry! Couldn\'t save.')
                 })
             },
-            createJob(){
+            createJob(event){
                 axios.post('/create-job', this.job).then((res) => {
                     if(res.data.status === 'success'){
                         this.getJobs();
                         $('#createJob').collapse('hide')
                         $('#createJob').collapse('dispose')
                         $('#postedJobs').collapse('show')
-
-                        this.$refs.jobForm.reset();
+                        this.resetForm()
+/*
+                        let updatedState = this.$options.data.apply(this)
+                        let currentState = this.$data
+                        Object.assign(currentState, updatedState)*/
+                        // $('#createJob').removeData('bs.collapse');
                     }
                 })
                 .catch((e) => {
@@ -252,16 +258,27 @@
                 .then(response => {
                     this.appliedJobs = response.data;
                 });
+            },
+            resetForm(){
+                this.$data.job = {
+                        title: null,
+                        description: null,
+                        salary: 0,
+                        location: null,
+                        country: null,
+                        status: null
+                }
             }
         },
         beforeMount() {
             let userFromStore = this.$store.state.user
             this.user =  userFromStore ? JSON.parse(userFromStore) : this.$user
             this.countries = countries;
-            this.user.name = this.user.businessName ?? this.user.firstName
+            this.name = this.user.businessName ?? this.user.firstName
         },
         mounted() {
             $('#postedJobs').collapse('show')
+            this.getJobs()
             if(this.user.type === 'applicant'){
                 this.getAppliedJobs()
             }

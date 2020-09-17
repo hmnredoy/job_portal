@@ -261,6 +261,7 @@
             this.user.name = this.user.businessName ?? this.user.firstName
         },
         mounted() {
+            $('#postedJobs').collapse('show')
             if(this.user.type === 'applicant'){
                 this.getAppliedJobs()
             }

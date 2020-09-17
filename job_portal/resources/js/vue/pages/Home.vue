@@ -25,6 +25,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mt-2 badge badge-pill">
+                                Company: {{job.owner.businessName}}
+                            </div>
+                            <br>
+                            <div class="mt-2 badge badge-pill">
+                                Location: {{job.location}}
+                            </div>
+                            <br>
+                            <div class="mt-2 badge badge-pill">
+                                Country: {{job.country}}
+                            </div>
                         </div>
                     </div>
                 </div>

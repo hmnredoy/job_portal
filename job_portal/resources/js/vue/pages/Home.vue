@@ -40,7 +40,7 @@
         name: "Home",
         data() {
             return {
-                jobs: null,
+                jobs: {},
                 user: null
             }
         },
@@ -82,7 +82,7 @@
                         this.user = this.$user
                     }
                 }else{
-                    helper.logout()
+                    helper.logout('/')
                 }
             }
         },

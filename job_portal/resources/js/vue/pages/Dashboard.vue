@@ -114,6 +114,7 @@
                                         <th scope="col">First Name</th>
                                         <th scope="col">Last Name</th>
                                         <th scope="col">Email</th>
+                                        <th scope="col">Skills</th>
                                         <th scope="col">Applied At</th>
                                     </tr>
                                     </thead>
@@ -123,6 +124,7 @@
                                         <td>{{ application.user.firstName }}</td>
                                         <td>{{ application.user.lastName }}</td>
                                         <td>{{ application.user.email }}</td>
+                                        <td>{{ application.user.skills }}</td>
                                         <td>{{ application.created_at | dateFormat }}</td>
                                     </tr>
                                     </tbody>
@@ -190,12 +192,12 @@
               },
               countries: [],
               errors: null,
-              jobs: [],
-              applications: [],
+              jobs: {},
+              applications: {},
               selectedJobID: null,
               selectedJobTitle: null,
               user: null,
-              appliedJobs: []
+              appliedJobs: {}
           }
         },
         methods: {
@@ -257,9 +259,6 @@
             let userFromStore = this.$store.state.user
             this.user =  userFromStore ? JSON.parse(userFromStore) : this.$user
             this.countries = countries;
-
-            console.log(this.user)
-
             this.user.name = this.user.businessName ?? this.user.firstName
         },
         mounted() {

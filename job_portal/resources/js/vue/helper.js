@@ -56,7 +56,10 @@ let helper = {
 
             Vue.prototype.$user = null
 
-            router.push({ path: redirectPath})
+            if(router.currentRoute.fullPath !== redirectPath){
+                router.push({ path: redirectPath})
+            }
+
         }).catch((e) => {
             console.log(e)
             alert('Something went wrong!')

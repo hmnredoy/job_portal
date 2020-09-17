@@ -21,13 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fe645bed-87c2-4093-a704-9cb4caf0c341" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Job.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Job.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/RouteServiceProvider.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Dashboard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Home.js" afterDir="false" />
@@ -36,18 +29,10 @@
       <change beforePath="$PROJECT_DIR$/public/js/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/Register.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/components/Navbar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/components/Navbar.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Dashboard.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Profile.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Profile.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/pages/Register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/pages/Register.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/vue/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/vue/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/vue/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,7 +214,7 @@
       <workItem from="1600234777442" duration="1565000" />
       <workItem from="1600236690708" duration="100000" />
       <workItem from="1600236824257" duration="18654000" />
-      <workItem from="1600275673040" duration="26114000" />
+      <workItem from="1600275673040" duration="29159000" />
     </task>
     <servers />
   </component>

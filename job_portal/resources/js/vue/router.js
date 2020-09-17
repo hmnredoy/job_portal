@@ -55,7 +55,10 @@ router.beforeEach((to, from, next) => {
     if(!requiresAuth && typeof currentUser !== 'undefined'){
         next()
     }else if(requiresAuth && typeof currentUser === 'undefined'){
-        router.push({path: '/login'})
+
+        if(router.currentRoute.fullPath !== '/login'){
+            router.push({ path: '/login'})
+        }
         next()
     } else {
         next()

@@ -9,8 +9,8 @@
                 <span class="text-muted">({{user.type}})</span>
             </h2>
             <div class="card-body" v-if="user.type === 'company'">
-                <button class="btn btn-default mb-2" type="button" data-toggle="collapse" @click="getJobs(1)"
-                 data-target="#postedJobs" aria-expanded="false">
+                <button class="btn btn-success mb-2" type="button" data-toggle="collapse" @click="getJobs(1)"
+                 data-target="#postedJobs" aria-expanded="true">
                     Posted Jobs
                 </button>
 

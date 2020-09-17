@@ -184,7 +184,35 @@ var render = function() {
                         [_vm._v(_vm._s(job.description))]
                       ),
                       _vm._v(" "),
-                      _c("div", { staticClass: "card card-footer" }, [
+                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
+                        _vm._v(
+                          "\n                            Company: " +
+                            _vm._s(job.owner.businessName) +
+                            "\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
+                        _vm._v(
+                          "\n                            Location: " +
+                            _vm._s(job.location) +
+                            "\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
+                        _vm._v(
+                          "\n                            Country: " +
+                            _vm._s(job.country) +
+                            "\n                        "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card card-footer mt-2" }, [
                         _c(
                           "div",
                           {
@@ -211,7 +239,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-success",
+                                  staticClass: "btn btn-primary btn-sm",
                                   on: {
                                     click: function($event) {
                                       return _vm.apply(job.id)
@@ -222,34 +250,6 @@ var render = function() {
                               )
                             ])
                           ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
-                        _vm._v(
-                          "\n                            Company: " +
-                            _vm._s(job.owner.businessName) +
-                            "\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
-                        _vm._v(
-                          "\n                            Location: " +
-                            _vm._s(job.location) +
-                            "\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mt-2 badge badge-pill" }, [
-                        _vm._v(
-                          "\n                            Country: " +
-                            _vm._s(job.country) +
-                            "\n                        "
                         )
                       ])
                     ])

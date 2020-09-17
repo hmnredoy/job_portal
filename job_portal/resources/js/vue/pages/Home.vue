@@ -12,19 +12,6 @@
                         <div class="caption card-body">
                             <h4 class="group card-title inner list-group-item-heading">{{job.title}}</h4>
                             <p class="group inner list-group-item-text">{{job.description}}</p>
-
-                            <div class="card card-footer">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="float-left">
-                                        <p class="lead">
-                                            BDT {{job.salary}}</p>
-                                        <small class="text-muted">{{job.created_at | fromNow}}</small>
-                                    </div>
-                                    <div class="float-right">
-                                        <button class="btn btn-success" @click="apply(job.id)">Apply</button>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="mt-2 badge badge-pill">
                                 Company: {{job.owner.businessName}}
                             </div>
@@ -36,6 +23,19 @@
                             <div class="mt-2 badge badge-pill">
                                 Country: {{job.country}}
                             </div>
+                            <div class="card card-footer mt-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="float-left">
+                                        <p class="lead">
+                                            BDT {{job.salary}}</p>
+                                        <small class="text-muted">{{job.created_at | fromNow}}</small>
+                                    </div>
+                                    <div class="float-right">
+                                        <button class="btn btn-primary btn-sm" @click="apply(job.id)">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

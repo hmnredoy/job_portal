@@ -176,7 +176,6 @@
 
 <script>
     import countries from "../../libraries/countries";
-    import {helper} from "../helper";
 
     export default {
         name: "Dashboard",
@@ -255,7 +254,7 @@
                 });
             }
         },
-        async beforeMount() {
+        beforeMount() {
             let userFromStore = this.$store.state.user
             this.user =  userFromStore ? JSON.parse(userFromStore) : this.$user
             this.countries = countries;

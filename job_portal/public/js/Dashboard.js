@@ -11,16 +11,7 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
 /* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _home_hmnredoy_Projects_php_job_portal_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
-/* harmony import */ var _libraries_countries__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../libraries/countries */ "./resources/js/libraries/countries.js");
-/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helper */ "./resources/js/vue/helper.js");
-
-
-
+/* harmony import */ var _libraries_countries__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../libraries/countries */ "./resources/js/libraries/countries.js");
 
 //
 //
@@ -198,7 +189,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Dashboard",
@@ -287,28 +277,12 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    var _this6 = this;
+    var _this$user$businessNa;
 
-    return Object(_home_hmnredoy_Projects_php_job_portal_node_modules_babel_runtime_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__["default"])( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee() {
-      var _this6$user$businessN;
-
-      var userFromStore;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              userFromStore = _this6.$store.state.user;
-              _this6.user = userFromStore ? JSON.parse(userFromStore) : _this6.$user;
-              _this6.countries = _libraries_countries__WEBPACK_IMPORTED_MODULE_4__["default"];
-              _this6.user.name = (_this6$user$businessN = _this6.user.businessName) !== null && _this6$user$businessN !== void 0 ? _this6$user$businessN : _this6.user.firstName;
-
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+    var userFromStore = this.$store.state.user;
+    this.user = userFromStore ? JSON.parse(userFromStore) : this.$user;
+    this.countries = _libraries_countries__WEBPACK_IMPORTED_MODULE_1__["default"];
+    this.user.name = (_this$user$businessNa = this.user.businessName) !== null && _this$user$businessNa !== void 0 ? _this$user$businessNa : this.user.firstName;
   },
   mounted: function mounted() {
     if (this.user.type === 'applicant') {

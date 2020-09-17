@@ -25,7 +25,7 @@ let helper = {
         }
         return item.value
     },
-    async checkAuth(config) {
+    /*async checkAuth(config) {
         let redirectPath = config.redirectPath ?? '/login'
         let logout = config.logout ?? true
         let preventRedirect = config.preventRedirect ?? false
@@ -47,7 +47,7 @@ let helper = {
             !preventRedirect ? router.push({path: redirectPath}) : ''
         }
         return returnVal
-    },
+    },*/
     logout(redirectPath = '/login'){
         axios.post('/logout').then(() => {
             store.commit("setLogin", false)

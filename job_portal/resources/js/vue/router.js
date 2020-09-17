@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import {helper} from "./helper";
+import store from "./store";
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,7 +48,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-    const currentUser = window.user
+    const currentUser = store.state.user ?? window.user
 
     let token = helper.getFromLocal("token")
     token ? helper.setToLocal("token", token) : ''
@@ -55,11 +56,10 @@ router.beforeEach((to, from, next) => {
     if(!requiresAuth && typeof currentUser !== 'undefined'){
         next()
     }else if(requiresAuth && typeof currentUser === 'undefined'){
-
-        if(router.currentRoute.fullPath !== '/login'){
+       /* if(router.currentRoute.fullPath !== '/login'){
             router.push({ path: '/login'})
-        }
-        next()
+        }*/
+        next('/login')
     } else {
         next()
     }

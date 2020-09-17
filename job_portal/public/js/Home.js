@@ -183,14 +183,14 @@ var render = function() {
                               dy: ".3em"
                             }
                           },
-                          [_vm._v(_vm._s(job.title))]
+                          [_vm._v(_vm._s(job.description))]
                         )
                       ]
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "card-body" }, [
                       _c("p", { staticClass: "card-text" }, [
-                        _vm._v(_vm._s(job.description))
+                        _vm._v(_vm._s(job.title))
                       ]),
                       _vm._v(" "),
                       _c("p", { staticClass: "text-muted" }, [

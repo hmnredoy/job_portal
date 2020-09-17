@@ -14,7 +14,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        return $this->getUser($request->token)
+        $user = $this->getUser($request->token);
+        return $user ? $user
             ->only('firstName',
             'lastName',
             'email',
@@ -23,7 +24,7 @@ class UserController extends Controller
             'type',
             'skills',
             'businessName'
-            );
+            ) : null;
     }
 
     public function update(Request $request)

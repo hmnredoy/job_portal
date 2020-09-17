@@ -29,7 +29,7 @@ class AuthController extends Controller
         $user = User::create($request->input());
         Auth::login($user);
         unset($user['password'], $user['id']);
-        return ['status' => 'success', 'token' => $this->makeToken($user), 'name' => $user->firstName];
+        return ['status' => 'success', 'token' => $this->makeToken($user), 'user' => $user->only(['firstName', 'lastName', 'businessName', 'type'])];
     }
 
     public function login(Request $request)
@@ -44,7 +44,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             unset($user['id']);
-            return ['status' => 'success', 'token' => $this->makeToken($user), 'user' => $user->only('firstName', 'lastName', 'businessName', 'type')];
+            return ['status' => 'success', 'token' => $this->makeToken($user), 'user' => $user->only(['firstName', 'lastName', 'businessName', 'type'])];
         }else{
             return response(['errors' => ['password' => ['Wrong credentials!']]], 422);
         }
@@ -56,10 +56,7 @@ class AuthController extends Controller
 
     public function logout(){
         Auth::logout();
+        return ['auth' => auth()->check()];
     }
 
-    protected function makeToken($payload)
-    {
-        return JWT::encode($payload, env('SECRET_KEY', 'ABC-SECRET-123'));
-    }
 }

@@ -1,8 +1,6 @@
 <template>
     <div>
-
-    <navbar/>
-
+    <navbar :loginStatus="true"/>
     <div class="container">
         <div class="card">
             <div class="card-body d-flex justify-content-center">
@@ -34,16 +32,19 @@
                         <label>Skills:</label>
                         <div style="display: inline-block;">
                             <span class="text-muted" v-for="(skill, index) in user.skills" :key="index">
-                                <span>{{skill}}, </span>
+                                <span class="badge badge-pill">{{skill}}</span>
                             </span>
+                            <button class="btn btn-sm btn-light" @click="user.skills = []">Clear</button>
                         </div>
 
-                        <input type="text" v-model="skill" @keydown.enter.prevent="addSkill" class="form-control" placeholder="Write skill and press Enter">
+                        <input type="text" @keyup.enter.prevent="addSkill($event)" class="form-control" placeholder="Write skill and press Enter">
                     </div>
 
                     <div class="profile-image-wrapper mb-2" v-if="user.type === 'applicant'">
                         <label for="cv">Select CV</label>
                         <input type="file" class="form-control-file" id="cv" @change="setCV($event)">
+                        <br>
+                        <a :href="user.cv" target="_blank" v-if="!cvDirty && user.cv">Download CV</a>
                     </div>
 
                     <hr>
@@ -97,15 +98,18 @@
                     skills: []
                 },
                 errors: null,
-                profileImage: '/storage/images/profile.png',
+                profileImage: null,
                 skill: null,
+                token: null,
+                imageDirty: false,
+                cvDirty: false,
 
             }
         },
         methods: {
-            addSkill(){
-                this.user.skills.push(this.skill)
-                this.skill = null
+            addSkill(e){
+                this.user.skills.push(e.currentTarget.value)
+                e.currentTarget.value = null
             },
             setPhoto(e){
                 let file = e.target.files[0];
@@ -116,49 +120,63 @@
                 }
                 reader.readAsDataURL(file);
 
+                this.imageDirty = true
                 this.user.image = file
             },
             setCV(e){
+                this.cvDirty = true
                 this.user.cv = e.target.files[0];
             },
-            getUserData(){
-                axios.get('/user?token=' + helper.getFromLocal("token"))
-                    .then((res) => {
-                        Object.assign(this.user, res.data)
-                        console.log(res)
-                    })
-                    .catch((e) => {
-                        this.errors = e.response.data.errors
-                    })
-            },
             saveData(){
+                let data = new FormData();
+                if(this.user.type === 'applicant'){
+                    let image = this.user.image
+                    let cv = this.user.cv
 
-                 let formData = new FormData();
-                 let image = this.user.image.files[0] ?? null
-                 let cv = this.user.cv.files[0] ?? null
-                 formData.append("image", image);
-                 formData.append("cv", cv);
-                //
-               //  let data = Object.assign(this.user, formData, {token: helper.getFromLocal("token")},{_method: 'patch'})
+                    this.imageDirty ? data.append('image', image, image.name) : ''
+                    this.cvDirty ? data.append("cv", cv) : ''
+                }
 
-                console.log(formData)
+                data.append('token', this.token)
 
-                /*axios.post('/user',data,
-                {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
+                for ( let key in this.user ) {
+                    data.append(key, this.user[key]);
+                }
+
+                let settings = { headers: { 'content-type': 'multipart/form-data' } }
+
+                axios.post('/user', data, settings)
+                    .then((res) => {
+                        if(res.data.status === 'success'){
+                            helper.setToLocal('token', res.data.token)
+                            alert('Updated!')
+                            this.getUser()
                         }
                     })
-                    .then((res) => {
-                        console.log(res)
-                    })
                     .catch((e) => {
-                        this.errors = e.response.data.errors
-                    })*/
+                        if(typeof e.response.data.errors !== 'undefined'){
+                            this.errors = e.response.data.errors
+                        }else{
+                            alert("Please try again!")
+                        }
+                    })
+            },
+            getUser(){
+                this.token = helper.getFromLocal('token')
+                if(this.token){
+                    axios.get('/user?token='+this.token)
+                        .then(response => {
+                            response.data.skills = !response.data.skills ? [] : response.data.skills.split(',')
+                            Object.assign(this.user, response.data)
+                            this.profileImage = response.data.image ?? '/storage/images/profile.png'
+                        });
+                }else{
+                    helper.logout()
+                }
             }
         },
         mounted() {
-            this.getUserData()
+            this.getUser()
         },
     }
 </script>

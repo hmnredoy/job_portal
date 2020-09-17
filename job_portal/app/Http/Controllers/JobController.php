@@ -14,7 +14,7 @@ class JobController extends Controller
     }
 
     public function allJobs(){
-       return Job::where('status', 1)->latest()->paginate(10);
+       return Job::with('owner:id,businessName')->where('status', 1)->latest()->paginate(10);
     }
 
     public function store(Request $request) {
@@ -39,6 +39,15 @@ class JobController extends Controller
     }
 
     public function apply(Request $request){
+
+        if(auth()->user()->type == 'company'){
+            return response(['status' => 'failed', 'message' => 'You are not allowed to apply for a job!'], 422);
+        }else{
+            if(!auth()->user()->cv){
+                return response(['status' => 'failed', 'message' => 'Please upload your CV!', 'type' => 'update_cv'], 422);
+            }
+        }
+
         if($request->filled('token') && $request->filled('jobID')){
             $decoded = $this->decodeJWT($request->token);
 

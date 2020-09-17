@@ -52,12 +52,12 @@
                     this.errors = null
                     helper.setToLocal("token", res.data.token)
                     this.$store.commit("setLogin", true)
-                    this.$store.commit("setUserName", res.data.name)
-
+                    this.$store.commit("setUser", JSON.stringify(res.data.user))
                     let previousURL = helper.getFromLocal('previousURL')
+
                     previousURL
-                        ? this.$router.push({ path: previousURL})
-                        : this.$router.push({ name: 'Dashboard'})
+                    ? this.$router.push({ path: previousURL})
+                    : this.$router.push({ name: 'Dashboard'})
 
                 })
                 .catch((e) => {

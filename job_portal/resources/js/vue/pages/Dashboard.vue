@@ -1,15 +1,15 @@
 <template>
     <div>
 
-    <navbar/>
+    <navbar :loginStatus="true"/>
 
     <div class="container">
         <div class="card">
-            <h2 class="pl-2">Welcome {{businessName}}
-                <span class="text-muted">({{type}})</span>
+            <h2 class="pl-2">Welcome {{user.name}}
+                <span class="text-muted">({{user.type}})</span>
             </h2>
-            <div class="card-body" v-if=" type === 'company' ">
-                <button class="btn btn-default mb-2" type="button" data-toggle="collapse"
+            <div class="card-body" v-if="user.type === 'company'">
+                <button class="btn btn-default mb-2" type="button" data-toggle="collapse" @click="getJobs(1)"
                  data-target="#postedJobs" aria-expanded="false">
                     Posted Jobs
                 </button>
@@ -21,7 +21,7 @@
 
                 <div class="collapse mb-2" id="createJob">
                     <div class="card card-body">
-                        <form @submit.prevent="createJob">
+                        <form @submit.prevent="createJob" ref="jobForm">
                             <div class="form-group">
                                 <label for="j_title">Job Title</label>
                                 <input v-model="job.title" type="text" class="form-control" id="j_title" autofocus>
@@ -133,6 +133,39 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card mt-4" v-else>
+                <div class="card-header">
+                    <h4>Applied Jobs</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">title</th>
+                            <th scope="col">description</th>
+                            <th scope="col">salary</th>
+                            <th scope="col">location</th>
+                            <th scope="col">country</th>
+                            <th scope="col">Applied At</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="job in appliedJobs.data" :key="job.id">
+                            <td>{{ job.title }}</td>
+                            <td>{{ job.description | str_limit(5) }}</td>
+                            <td>{{ job.salary }}</td>
+                            <td>{{ job.location }}</td>
+                            <td>{{ job.country }}</td>
+                            <td>{{ job.pivot.created_at | dateFormat }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <pagination :data="appliedJobs" @pagination-change-page="getAppliedJobs"></pagination>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -161,8 +194,8 @@
               applications: [],
               selectedJobID: null,
               selectedJobTitle: null,
-              businessName: null,
-              type: null
+              user: null,
+              appliedJobs: []
           }
         },
         methods: {
@@ -171,7 +204,9 @@
 
                 this.selectedJobID = jobID
                 this.selectedJobTitle = jobTitle
-                $('#applications').collapse('toggle')
+
+                this.getApplications(1)
+                $('#applications').collapse('show')
             },
             changeJobStatus(id){
                 axios.post('/change-job-status', {jobID : id}).then((res) => {
@@ -188,7 +223,10 @@
                     if(res.data.status === 'success'){
                         this.getJobs();
                         $('#createJob').collapse('hide')
+                        $('#createJob').collapse('dispose')
                         $('#postedJobs').collapse('show')
+
+                        this.$refs.jobForm.reset();
                     }
                 })
                 .catch((e) => {
@@ -196,6 +234,7 @@
                 })
             },
             getJobs(page = 1){
+                $('#applications').collapse('hide')
                 axios.get('/jobs?page=' + page)
                 .then(response => {
                     this.jobs = response.data;
@@ -207,31 +246,26 @@
                     this.applications = response.data;
                 });
             },
-            getUserData(){
-                axios.get('/user?token=' + helper.getFromLocal("token"))
-                    .then((res) => {
-                        this.businessName = res.data.businessName
-                        this.type = res.data.type
-                        console.log(res)
-                    })
-                    .catch((e) => {
-                        alert('Something went wrong!')
-                        helper.logout()
-                    })
-            },
+            getAppliedJobs(page = 1){
+                axios.get('/applied-jobs?page=' + page)
+                .then(response => {
+                    this.appliedJobs = response.data;
+                });
+            }
+        },
+        async beforeMount() {
+            let userFromStore = this.$store.state.user
+            this.user =  userFromStore ? JSON.parse(userFromStore) : this.$user
+            this.countries = countries;
+
+            console.log(this.user)
+
+            this.user.name = this.user.businessName ?? this.user.firstName
         },
         mounted() {
-            this.getUserData()
-            this.countries = countries;
-            $('#postedJobs').on('shown.bs.collapse', () => {
-                $('#applications').collapse('hide')
-                this.getJobs();
-            })
-
-            $('#applications').on('shown.bs.collapse', () => {
-                this.getApplications();
-            })
-
+            if(this.user.type === 'applicant'){
+                this.getAppliedJobs()
+            }
         },
     }
 </script>

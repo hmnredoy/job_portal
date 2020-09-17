@@ -16,7 +16,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['token'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,19 +37,10 @@ class User extends Authenticatable
         'skills' => 'array',
     ];
 
-    /*public function jobs(){
-        $this->hasManyThrough(Job::class, JobApplicant::class);
-    }*/
 
     public function jobs()
     {
         return $this->belongsToMany(Job::class, 'job_applicants')->withTimestamps();
     }
 
-/*
-    public function appliedJobs()
-    {
-        return $this->belongsToMany('App\Models\Job')
-            ->using('App\Models\JobApplicant');
-    }*/
 }

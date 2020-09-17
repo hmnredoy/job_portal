@@ -25,7 +25,8 @@ Route::post( 'logout',  [AuthController::class, 'logout']);
 Route::get( 'verify',   [AuthController::class, 'verifyUser']);
 
 Route::get('user',      [UserController::class, 'index']);
-Route::patch('user',    [UserController::class, 'update']);
+Route::post('user',     [UserController::class, 'update']);
+Route::get('applied-jobs', [UserController::class, 'appliedJobs']);
 
 Route::post('create-job',         [JobController::class, 'store']);
 Route::get( 'jobs',               [JobController::class, 'index']);

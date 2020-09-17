@@ -1,7 +1,7 @@
 <template>
     <div>
 
-    <navbar/>
+        <navbar :loginStatus="user"/>
 
         <div class="album py-5 bg-light">
             <div class="container">
@@ -15,6 +15,7 @@
                                 <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{job.title}}</text></svg>
                             <div class="card-body">
                                 <p class="card-text">{{job.description}}</p>
+                                <p class="text-muted">Company: {{job.owner.businessName}}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">{{job.created_at | fromNow}}</small>
                                     <button type="button" class="btn btn-sm btn-success" @click="apply(job.id)">Apply</button>
@@ -34,11 +35,13 @@
 
 <script>
     import {helper} from "../helper";
+    import router from "../router";
     export default {
         name: "Home",
         data() {
             return {
-                jobs: null
+                jobs: null,
+                user: null
             }
         },
         methods: {
@@ -49,21 +52,43 @@
                 });
             },
             apply(jobID){
-                helper.checkAuth({preventRedirect: true}).then(res => {
-                    const token = helper.getFromLocal('token')
-                    !res ? this.$router.push({path: '/login'}) :
+                const token = helper.getFromLocal('token')
+                if(token){
                     axios.post('/apply', {token, jobID}).then((res) => {
                         if(res.data.status === 'success'){
                             alert('Applied Successfully!')
                         }
                     }).catch(e => {
                         alert(typeof e.response.data.message !== 'undefined' ? e.response.data.message : 'Something went wrong!')
+
+                        if(e.response.data.type === 'update_cv'){
+                            this.$router.push({path: '/profile'})
+                        }
                     })
-                })
+                }else{
+                    this.$router.push({path: '/login'})
+                }
+
+            },
+            getUser(){
+                this.token = helper.getFromLocal('token')
+                if(this.token){
+                    if(!this.$user || typeof this.$user === 'undefined'){
+                        axios.get('/user?token='+this.token)
+                        .then(response => {
+                            this.user = response.data
+                        });
+                    }else{
+                        this.user = this.$user
+                    }
+                }else{
+                    helper.logout()
+                }
             }
         },
         mounted() {
             this.getJobs();
+            this.getUser();
         },
     }
 </script>

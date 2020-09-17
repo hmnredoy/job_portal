@@ -65,12 +65,9 @@ export default {
             axios.post('/register', this.user)
             .then((res) => {
                 this.errors = null
-
                 helper.setToLocal("token", res.data.token)
-                helper.setToLocal("user", {"name": res.data.name})
-
                 this.$store.commit("setLogin", true)
-                this.$store.commit("setUserName", res.data.name)
+                this.$store.commit("setUser",  JSON.stringify(res.data.user))
 
                 this.$router.push({ name: 'Dashboard'})
             })

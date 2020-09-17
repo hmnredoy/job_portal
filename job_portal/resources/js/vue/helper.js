@@ -1,5 +1,6 @@
 import store from "./store";
 import router from './router';
+import Vue from 'vue'
 
 let helper = {
     setToLocal(key, value, ttl = 1800000) { // 30 Minutes
@@ -11,7 +12,6 @@ let helper = {
         localStorage.setItem(key, JSON.stringify(item))
     },
     getFromLocal(key) {
-        console.log('get from local '+key)
         const itemStr = localStorage.getItem(key)
         if (!itemStr) {
             return null
@@ -26,7 +26,7 @@ let helper = {
         return item.value
     },
     async checkAuth(config) {
-        let redirectPath = config.redirectPath ?? '/'
+        let redirectPath = config.redirectPath ?? '/login'
         let logout = config.logout ?? true
         let preventRedirect = config.preventRedirect ?? false
         let returnVal = false
@@ -48,11 +48,14 @@ let helper = {
         }
         return returnVal
     },
-    logout(redirectPath = '/'){
+    logout(redirectPath = '/login'){
         axios.post('/logout').then(() => {
             store.commit("setLogin", false)
             localStorage.removeItem('token')
-            localStorage.removeItem('user')
+            localStorage.removeItem('previousURL')
+
+            Vue.prototype.$user = null
+
             router.push({ path: redirectPath})
         }).catch((e) => {
             console.log(e)

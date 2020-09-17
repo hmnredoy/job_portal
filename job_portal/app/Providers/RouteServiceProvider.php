@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -45,6 +47,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
         });
+
+        /*Route::bind('token', function ($value) {
+            $decoded = Controller::decodeJWT($value);
+            return User::where('email', $decoded->email)->first();
+        });*/
     }
 
     /**

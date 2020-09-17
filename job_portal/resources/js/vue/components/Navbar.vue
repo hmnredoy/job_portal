@@ -16,7 +16,7 @@
                   </router-link>
             </li>
             <li class="nav-item">
-                  <a href="javascript:;" class="nav-link" @click.prevent="logout">Logout</a>
+                  <a href="javascript:" class="nav-link" @click.prevent="logout">Logout</a>
             </li>
         </ul>
          <ul class="navbar-nav ml-auto" v-else>
@@ -32,13 +32,21 @@
 </template>
 
 <script>
-    import {helper} from "../helper";
+import {helper} from "../helper";
 
-    export default {
+export default {
         name: "Navbar",
+        props: ['loginStatus'],
         computed: {
             loggedIn(){
-                return this.$store.state.loggedIn || helper.getFromLocal("token")
+                /*let status = this.$store.state.loggedIn ||
+                    typeof this.$user !== 'undefined' ||
+                    this.$user !== null
+
+                console.log('status')
+                console.log(status)*/
+
+                return !!this.loginStatus;
             }
         },
         methods: {

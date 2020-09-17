@@ -9,15 +9,30 @@
 
     <title>{{ config('app.name', 'Job Portal') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
     <router-view></router-view>
+
+    @auth
+        @php $user = auth()->user()
+                ->only(['firstName',
+                        'lastName',
+                        'email',
+                        'image',
+                        'cv',
+                        'type',
+                        'skills',
+                        'businessName']);
+         @endphp
+        <script>
+            window.user = @json($user)
+        </script>
+    @endauth
+
+    <script src="{{ asset('js/app.js') }}"></script>
 </div>
 </body>
 </html>

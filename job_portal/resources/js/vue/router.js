@@ -3,8 +3,6 @@ import VueRouter from "vue-router";
 import {helper} from "./helper";
 Vue.use(VueRouter)
 
-const opeRouteNames = ['Login', 'Register', 'Index', 'NotFound']
-
 const routes = [
     {
         path: "/",
@@ -15,12 +13,14 @@ const routes = [
     {
         path: "/dashboard",
         name: "Dashboard",
+        meta: { requiresAuth: true },
         component: () =>
             import(/* webpackChunkName: "js/Dashboard" */ "./pages/Dashboard.vue")
     },
     {
         path: "/profile",
         name: "Profile",
+        meta: { requiresAuth: true },
         component: () =>
             import(/* webpackChunkName: "js/Profile" */ "./pages/Profile.vue")
     },
@@ -45,24 +45,22 @@ const router = new VueRouter({
     routes
 });
 
-
 router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+    const currentUser = window.user
 
-    let open = to.matched.some((x) => {
-        return opeRouteNames.includes(x.name)
-    })
+    let token = helper.getFromLocal("token")
+    token ? helper.setToLocal("token", token) : ''
 
-    helper.setToLocal('previousURL', from.path)
-    helper.checkAuth({preventRedirect: true}).then(res => {
-        if(!open && !res) {
-            helper.logout()
-            next('/')
-        }
-        else {
-            helper.setToLocal("token", helper.getFromLocal("token"))
-            next()
-        }
-    })
+    if(!requiresAuth && typeof currentUser !== 'undefined'){
+        next()
+    }else if(requiresAuth && typeof currentUser === 'undefined'){
+        router.push({path: '/login'})
+        next()
+    } else {
+        next()
+    }
+
 })
 
 export default router;

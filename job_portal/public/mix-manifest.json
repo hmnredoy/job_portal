@@ -5,7 +5,5 @@
     "/js/Home.js": "/js/Home.js",
     "/js/Login.js": "/js/Login.js",
     "/js/Profile.js": "/js/Profile.js",
-    "/js/Register.js": "/js/Register.js",
-    "/vendors~js/Login~js/Register.js": "/vendors~js/Login~js/Register.js",
-    "/vendors~js/Dashboard.js": "/vendors~js/Dashboard.js"
+    "/js/Register.js": "/js/Register.js"
 }

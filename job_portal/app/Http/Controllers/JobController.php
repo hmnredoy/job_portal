@@ -14,7 +14,7 @@ class JobController extends Controller
     }
 
     public function allJobs(){
-       return Job::with('owner:id,businessName')->where('status', 1)->latest()->paginate(10);
+       return Job::with('owner:id,businessName')->where('status', 1)->latest()->paginate(12);
     }
 
     public function store(Request $request) {

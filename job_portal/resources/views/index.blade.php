@@ -10,11 +10,10 @@
     <title>{{ config('app.name', 'Job Portal') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+{{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 </head>
 <body>
 <div id="app">
-    <router-view></router-view>
 
     @auth
         @php $user = auth()->user()
